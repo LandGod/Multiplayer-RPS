@@ -1,22 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
-<link rel="stylesheet" href="assets/style.css">
-<title>Rock Paper Scisors Royale!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+    <link rel="stylesheet" href="assets/style.css">
+    <title>Rock Paper Scisors Royale!</title>
 </head>
+
 <body>
 
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-database.js"></script>
-<script src="assets/app.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">Rock Paper Scisors Royale!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Game<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">How to Play</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About</a>
+                </li>
+            </ul>
+            <div>
+                <a class="nav-link" href="signin.html">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="row mx-auto content-center">
+            <!-- Main content area -->
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-9" id="user-name-ul">
+                        Test User 17
+                    </div>
+                </div>
+                <div class="row content-center">
+                    <div class="col-9 mx-auto   " id="main-screen">
+                        <div class="text-center" id="readout">RPS!</div>
+                    </div>
+                </div>
+                <div class="row content-center">
+                    <div class="col-9 mx-auto text-center">
+                        <h3 class="mx-auto" id="game-feeback">FEEDBACK!</h3>
+                    </div>
+                </div>
+                <div class="row justify-content-around">
+                    <div class="col-2 game-buttons text-center">
+                        <button class="btn btn-dark" id="rock-button">Rock</button>
+                    </div>
+                    <div class="col-2 game-buttons text-center">
+                        <button class="btn btn-dark" id="paper-button">Paper</button>
+                    </div>
+                    <div class="col-2 game-buttons text-center">
+                        <button class="btn btn-dark" id="scisors-button">Scisors</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat side-bar -->
+            <div class="col-3">
+                <div id="chat-header">Chat Header</div>
+                <div id="chat-body"> Chat Body</div>
+                <input type="text" id="chat-input">
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-database.js"></script>
+    <script src="assets/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
+
 </html>
