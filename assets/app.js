@@ -20,6 +20,17 @@ const scissors = 'scissors';
 // Create a handle for firebase data interaction
 var database = firebase.database();
 
+// html element handles:
+const userNameDiv = $('#user-name-ul'); // Upper left-hand corner username display
+const mainDisplay = $('#main-screen') // Main display area for game action 
+const mainReadout = $('#readout'); // Game action descriptions
+const feedback = $('#game-feeback'); // Results output
+
+// html element handles for chat:
+const chatHead = $('#chat-header');
+const chatBody = $('#chat-body');
+const chatInput = $('#chat-input');
+
 function solveGame (u1, u2) {
     // Take two objects and returns the object of the winner, or undefined if there is no winner
     // Inputs must be in the form of {user: username, move: move}
@@ -43,3 +54,12 @@ function solveGame (u1, u2) {
             throw('Invalid input to solveGame. Moves must either be rock, paper, or scissors');
     }
 };
+
+
+
+// When document is fully loaded, enable click handlers
+$(document).ready( function () {
+
+    
+
+});
