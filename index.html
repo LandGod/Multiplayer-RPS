@@ -49,7 +49,9 @@
                 </div>
                 <div class="row content-center">
                     <div class="col-9 mx-auto   " id="main-screen">
-                        <div class="text-center" id="readout">RPS!</div>
+                        <div class="text-center" id="readout">
+                            <button class="btn btn-danger" id="play-button">Play</button>
+                        </div>
                     </div>
                 </div>
                 <div class="row content-center">
@@ -59,13 +61,13 @@
                 </div>
                 <div class="row justify-content-around">
                     <div class="col-2 game-buttons text-center">
-                        <button class="btn btn-dark" id="rock-button">Rock</button>
+                        <button class="btn btn-dark" id="rock-button" disabled>Rock</button>
                     </div>
                     <div class="col-2 game-buttons text-center">
-                        <button class="btn btn-dark" id="paper-button">Paper</button>
+                        <button class="btn btn-dark" id="paper-button" disabled>Paper</button>
                     </div>
                     <div class="col-2 game-buttons text-center">
-                        <button class="btn btn-dark" id="scisors-button">Scisors</button>
+                        <button class="btn btn-dark" id="scisors-button" disabled>Scisors</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +75,7 @@
             <!-- Chat side-bar -->
             <div class="col-3">
                 <div id="chat-header">Chat Header</div>
-                <div id="chat-body"> Chat Body</div>
+                <div id="chat-body">Chat Body</div>
                 <input type="text" id="chat-input">
             </div>
         </div>
