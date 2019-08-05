@@ -1,5 +1,5 @@
 .hide {
-    color: rgba(0,0,0,0);
-    background-color: rgba(0,0,0,0);
-    border-color: rgba(0,0,0,0);
+    color: rgba(0,0,0,0) !important;
+    background-color: rgba(0,0,0,0) !important;
+    border-color: rgba(0,0,0,0) !important;
 }
