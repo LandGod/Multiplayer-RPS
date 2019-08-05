@@ -55,6 +55,7 @@ const playerInfoSubmit = $('#playerNameSubmit');
 
 // Instantiate some global variables for later
 let playerName;
+let currentGame;
 
 function solveGame(u1, u2) {
     // Take two objects and returns the object of the winner, or undefined if there is no winner
@@ -87,6 +88,47 @@ function displayGame() {
     playDisplayBoxes.removeClass('hide');
 };
 
+function setOnUserExit() {
+    // Sets an event listener for the user closing this page, so that this can be reported to the other player
+    // When triggered, the even listener will delete the current game from the database
+    // This event should trigger a response on the other player's machine, but that's dealt with somewhere else 
+    // Note that we can't trust this function to always execute, so we will still need to also provide a timeout for responses from the opponent
+    // as an additional way to see if they have disconnected, or for that matter, just gone AFK
+    $(window).on('unload', () => {
+        database.ref().remove(currentGame);
+    });
+};
+
+function onOpponentDisconnect(reason) {
+    // Does what is required to inform the user and otherwise update the DOM when the opponent disconnects.
+    // Can do different things depending on whether or not the reaons for disconnect is known
+    // Called by listenForDisconnect()
+    switch (reason) {
+        default:
+            console.log('Opponent has disconnected!');
+            break;
+        case 'time':
+            console.log('Opponent lost connection or was kicked for inactivity.');
+            break;
+        case 'gameOver':
+            console.log('Oppenent left.');
+            break;
+
+    }
+};
+
+function listenForDisconnect() {
+    // Sets an event listener for a value change to the current game room in the database
+    // For any change other than deleting the whole room, does nothing
+    // For a change that deletes the room (sets data value to null) it calls the onOpponentDisconnect function without a reason
+    // TODO: Add logic to pass a reason for disconnect to the callback function.
+    database.ref(currentGame).on('value', (snapshot) => {
+        if (!snapshot.exists()) {
+            onOpponentDisconnect();
+        }
+    });
+};
+
 function toggleDisplayBox(box) {
     // Toggles a playerDisplayBox between its default colors as a user or opponent, and the greyed out color sceme. 
     // Will be used when signifying that there is no opponent present yet/ opponent has joined, as well as losses.
@@ -110,8 +152,6 @@ function toggleDisplayBox(box) {
 
 playButton.on('click', () => {
 
-    let currentGame;
-
     // Remove play button from DOM so user can't activate it more than once
     $('#play-button').detach();
 
@@ -130,6 +170,7 @@ playButton.on('click', () => {
 
 
             let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
+                currentGame = roomID.key;
                 console.log('created new room: ' + roomID.key)
             });
         }
