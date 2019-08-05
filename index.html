@@ -49,8 +49,15 @@
                 </div>
                 <div class="row content-center">
                     <div class="col-9 mx-auto   " id="main-screen">
+                        <form id="playerNameForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="playerName"
+                                    aria-describedby="nameHelp" placeholder="Enter Player Name">
+                                <small id="nameHelp" class="form-text text-muted">This is the name the other player will see.</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="playerNameSubmit">Submit</button>
+                        </form>
                         <div class="text-center" id="readout">
-                            <button class="btn btn-danger" id="play-button">Play</button>
                         </div>
                     </div>
                 </div>
