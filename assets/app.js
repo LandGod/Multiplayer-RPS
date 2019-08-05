@@ -35,6 +35,9 @@ const chatHead = $('#chat-header');
 const chatBody = $('#chat-body');
 const chatInput = $('#chat-input');
 
+// Html elements to add during game
+const playButton = $('<button class="btn btn-danger" id="play-button">').text('Play')
+
 function solveGame(u1, u2) {
     // Take two objects and returns the object of the winner, or undefined if there is no winner
     // Inputs must be in the form of {user: username, move: move}
@@ -64,7 +67,9 @@ $(document).ready(function () {
 
     let playerName = localStorage.currentUserName;
 
-    $('#play-button').on('click', () => {
+    mainDisplay.append(playButton);
+
+    playButton.on('click', () => {
 
         let currentGame;
 
