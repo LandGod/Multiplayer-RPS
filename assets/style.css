@@ -1,3 +1,22 @@
+.play-display-box {
+    height: 30vh;
+}
+
+.user {
+    background-color: lightgreen;
+    border: 2px solid green;
+}
+
+.opponent {
+    background-color: pink;
+    border: 2px solid red;
+}
+
+.nobody {
+    background-color: lightgray;
+    border: 2px solid grey;
+}
+
 .hide {
     /* Make everything invisible */
     color: rgba(0,0,0,0) !important;
