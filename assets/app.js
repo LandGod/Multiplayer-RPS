@@ -31,6 +31,10 @@ const mainDisplay = $('#main-screen') // Main display area for game action
 const mainReadout = $('#readout'); // Game action descriptions
 const feedback = $('#game-feeback'); // Results output
 
+const playDisplayBoxes = $('.play-display-box'); // Boxes for display of rock paper or scissors for each player
+const userDisplayBox = $('#user-display');
+const opponentDisplayBox = $('#opponent-display');
+
 // RPS Buttons
 const allActionButtons = $('.rps-button');
 const rockButton = $('#rock-button');
@@ -74,6 +78,31 @@ function solveGame(u1, u2) {
         default:
             throw ('Invalid input to solveGame. Moves must either be rock, paper, or scissors');
     }
+};
+
+function displayGame() {
+    // Reveals all game elements that are hidden before the game is ready to start.
+    allActionButtons.removeClass('hide');
+    chatWindow.removeClass('hide');
+    playDisplayBoxes.removeClass('hide');
+};
+
+function toggleDisplayBox(box) {
+    // Toggles a playerDisplayBox between its default colors as a user or opponent, and the greyed out color sceme. 
+    // Will be used when signifying that there is no opponent present yet/ opponent has joined, as well as losses.
+    if (box.hasClass('user')) { box.removeClass('user'); box.addClass('nobody') }
+    else if (box.hasClass('opponent')) { box.removeClass('opponent'); box.addClass('nobody') }
+    else if (box.hasClass('nobody')) {
+        box.removeClass('nobody');
+        switch (box.attr('id')) {
+            case 'user-dispaly':
+                box.addClass('user');
+                break;
+            case 'opponent-display':
+                box.addClass('opponent');
+                break;
+        }
+    };
 };
 
 //
@@ -128,8 +157,8 @@ playButton.on('click', () => {
                     database.ref().update(gameInfoUpdates);
 
                     // Finally, reveal action buttons
-                    allActionButtons.removeClass('hide');
-                    chatWindow.removeClass('hide');
+                    displayGame();
+
                     break;
                 }
             }
@@ -145,9 +174,10 @@ playButton.on('click', () => {
                 console.log('created new room: ' + roomID.key)
             });
 
-            // Finally, reveal action buttons
-            allActionButtons.removeClass('hide');
-            chatWindow.removeClass('hide');
+            // Finally, reveal action buttons, but first signify that no opponent is present with a darkened opponent box and message 
+            toggleDisplayBox(opponentDisplayBox);
+            feedback.text('Waiting for opponent to connect...');
+            displayGame();
         };
 
     })
@@ -174,6 +204,7 @@ $(document).ready(function () {
             return;
         }
         else {
+            // Remove form, set player name and reveal coresponding DOM element, the add play button
             playerName = pName;
             userNameSpan.text(playerName);
             userNameSpan.removeClass('hide');
