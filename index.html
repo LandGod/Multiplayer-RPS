@@ -37,60 +37,59 @@
             </div>
         </div>
     </nav>
-    
-    <div id="page-size-fix">
-        <main class="container">
-            <div class="row mx-auto content-center">
-                <!-- Main content area -->
-                <div class="col-9">
-                    <div class="row">
-                        <div class="col-9 mt-2">
-                            <div id="user-name-pic" class="hide"></div> <span class="hide" id="user-name-name">Test User
-                                17</span>
-                        </div>
+
+    <main class="container">
+        <div class="row mx-auto content-center">
+            <!-- Main content area -->
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-9 mt-2">
+                        <div id="user-name-pic" class="hide"></div> <span class="hide" id="user-name-name">Test User
+                            17</span>
                     </div>
-                    <div class="row content-center">
-                        <div class="col-9 mx-auto" id="main-screen">
-                            <form id="playerNameForm">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="playerName" aria-describedby="nameHelp"
-                                        placeholder="Enter Player Name">
-                                    <small id="nameHelp" class="form-text text-muted">This is the name the other player
-                                        will see.</small>
-                                </div>
-                                <button type="submit" class="btn btn-primary" id="playerNameSubmit">Submit</button>
-                            </form>
-                            <div class="text-center" id="readout">
+                </div>
+                <div class="row content-center">
+                    <div class="col-9 mx-auto" id="main-screen">
+                        <form id="playerNameForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="playerName" aria-describedby="nameHelp"
+                                    placeholder="Enter Player Name">
+                                <small id="nameHelp" class="form-text text-muted">This is the name the other player
+                                    will see.</small>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row content-center">
-                        <div class="col-9 mx-auto text-center">
-                            <h3 class="mx-auto  hide" id="game-feeback">FEEDBACK!</h3>
-                        </div>
-                    </div>
-                    <div class="row justify-content-around">
-                        <div class="col-2 game-buttons text-center">
-                            <button class="rps-button btn btn-dark hide" id="rock-button" disabled>Rock</button>
-                        </div>
-                        <div class="col-2 game-buttons text-center">
-                            <button class="rps-button btn btn-dark hide" id="paper-button" disabled>Paper</button>
-                        </div>
-                        <div class="col-2 game-buttons text-center">
-                            <button class="rps-button btn btn-dark hide" id="scisors-button" disabled>Scisors</button>
+                            <button type="submit" class="btn btn-primary" id="playerNameSubmit">Submit</button>
+                        </form>
+                        <div class="text-center" id="readout">
                         </div>
                     </div>
                 </div>
-
-                <!-- Chat side-bar -->
-                <div class="col-3">
-                    <div class="hide" id="chat-header">Chat Header</div>
-                    <div class="hide" id="chat-body">Chat Body</div>
-                    <input class="hide" type="text" id="chat-input">
+                <div class="row content-center">
+                    <div class="col-9 mx-auto text-center">
+                        <h3 class="mx-auto  hide" id="game-feeback">FEEDBACK!</h3>
+                    </div>
+                </div>
+                <div id="page-size-fix"></div>
+                <div class="row justify-content-around">
+                    <div class="col-2 game-buttons text-center">
+                        <button class="rps-button btn btn-dark hide" id="rock-button" disabled>Rock</button>
+                    </div>
+                    <div class="col-2 game-buttons text-center">
+                        <button class="rps-button btn btn-dark hide" id="paper-button" disabled>Paper</button>
+                    </div>
+                    <div class="col-2 game-buttons text-center">
+                        <button class="rps-button btn btn-dark hide" id="scisors-button" disabled>Scisors</button>
+                    </div>
                 </div>
             </div>
-        </main>
-    </div>
+
+            <!-- Chat side-bar -->
+            <div class="col-3">
+                <div class="hide" id="chat-header">Chat Header</div>
+                <div class="hide" id="chat-body">Chat Body</div>
+                <input class="hide" type="text" id="chat-input">
+            </div>
+        </div>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
