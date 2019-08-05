@@ -41,15 +41,17 @@
     <main class="container">
         <div class="row mx-auto content-center">
             <!-- Main content area -->
-            <div class="col-9">
+            <div class="col-10">
                 <div class="row">
-                    <div class="col-9 mt-2">
+                    <div class="col-10 mt-2">
                         <div id="user-name-pic" class="hide"></div> <span class="hide" id="user-name-name">Test User
                             17</span>
                     </div>
                 </div>
-                <div class="row content-center">
-                    <div class="col-9 mx-auto" id="main-screen">
+                <div class="row mx-auto content-center">
+                    <div class="col-10 mx-auto" id="main-screen">
+
+                        <!-- Player Name Input Form -->
                         <form id="playerNameForm">
                             <div class="form-group">
                                 <input type="text" class="form-control" id="playerName" aria-describedby="nameHelp"
@@ -59,16 +61,32 @@
                             </div>
                             <button type="submit" class="btn btn-primary" id="playerNameSubmit">Submit</button>
                         </form>
+
                         <div class="text-center" id="readout">
                         </div>
                     </div>
                 </div>
+
+                <!-- User Feeback Message Display -->
                 <div class="row content-center">
-                    <div class="col-9 mx-auto text-center">
+                    <div class="col-10 mx-auto text-center">
                         <h3 class="mx-auto  hide" id="game-feeback">FEEDBACK!</h3>
                     </div>
                 </div>
+
+                <div class="row justify-content-around mx-auto my-2">
+                    <div class="play-display-box col-5 hide user" id="user-display">
+
+                    </div>
+                    <div class="play-display-box col-5 hide opponent" id="opponent-display">
+
+                    </div>
+                </div>
+
+                <!-- Page Spacer to keep buttons on the bottom of the page -->
                 <div id="page-size-fix"></div>
+
+                <!-- Rock Paper Scissors buttons -->
                 <div class="row justify-content-around">
                     <div class="col-2 game-buttons text-center">
                         <button class="rps-button btn btn-dark hide" id="rock-button" disabled>Rock</button>
@@ -83,10 +101,13 @@
             </div>
 
             <!-- Chat side-bar -->
-            <div class="col-3">
-                <div class="hide" id="chat-header">Chat Header</div>
-                <div class="hide" id="chat-body">Chat Body</div>
-                <input class="hide" type="text" id="chat-input">
+            <div class="col-2">
+                <div class="chat-window hide" id="chat-header">Chat Header</div>
+                <div class="chat-window hide" id="chat-body">
+                    <div id="page-size-fix"></div>
+                    Chat Body
+                </div>
+                <input class="chat-window hide" type="text" id="chat-input">
             </div>
         </div>
     </main>
