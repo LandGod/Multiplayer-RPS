@@ -35,8 +35,14 @@ const chatHead = $('#chat-header');
 const chatBody = $('#chat-body');
 const chatInput = $('#chat-input');
 
-// Html elements to add during game
-const playButton = $('<button class="btn btn-danger" id="play-button">').text('Play')
+// Html elements to add/remove during game
+const playButton = $('<button class="btn btn-danger" id="play-button">').text('Play');
+const playerInfoForm = $('#playerNameForm');
+const playerNameInput = $('#playerName');
+const playerInfoSubmit = $('#playerNameSubmit');
+
+// Instantiate some global variables for later
+let playerName;
 
 function solveGame(u1, u2) {
     // Take two objects and returns the object of the winner, or undefined if there is no winner
@@ -134,8 +140,29 @@ playButton.on('click', () => {
 // When document is fully loaded, enable click handlers
 $(document).ready(function () {
 
-    let playerName = localStorage.currentUserName;
+    // Grab player name on submit being clicked
+    playerInfoSubmit.on('click', (event) => {
 
-    mainDisplay.append(playButton);
+        // Don't refresh the page
+        event.preventDefault()
+
+        // Get value from name field and run it through some checks
+        let pName = playerNameInput.val();
+
+        // Name too short
+        if (pName.length < 3) {
+            playerNameInput.addClass('is-invalid');
+            $('#nameHelp').addClass('is-invalid');
+            $('#nameHelp').text('Name too short! Name must be at least 3 letters long.');
+            return;
+        }
+        else {
+            playerName = pName;
+            playerInfoForm.remove();
+            mainReadout.append(playButton);
+        };
+
+    });
+
 
 });
