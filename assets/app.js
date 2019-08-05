@@ -25,12 +25,20 @@ const paper = 'paper';
 const scissors = 'scissors';
 
 // html element handles:
-const userNameDiv = $('#user-name-ul'); // Upper left-hand corner username display
+const userNameSpan = $('#user-name-name'); // Upper left-hand corner username display
+const userNamePic = $('#user-name-pic'); // Icon that goes to the left of the username
 const mainDisplay = $('#main-screen') // Main display area for game action 
 const mainReadout = $('#readout'); // Game action descriptions
 const feedback = $('#game-feeback'); // Results output
 
+// RPS Buttons
+const allActionButtons = $('.rps-button');
+const rockButton = $('#rock-button');
+const paperButton = $('#paper-button');
+const scissorsButton = $('#scissors-button');
+
 // html element handles for chat:
+const chatWindow = $('.chat-window');
 const chatHead = $('#chat-header');
 const chatBody = $('#chat-body');
 const chatInput = $('#chat-input');
@@ -79,7 +87,8 @@ playButton.on('click', () => {
     $('#play-button').detach();
 
     // Inform user about progress
-    $('#game-feeback').text('Looking for a game...');
+    feedback.text('Looking for a game...');
+    feedback.removeClass('hide');
 
     // Query database for list of current game rooms
     database.ref().once('value', function (snapshot) {
@@ -88,7 +97,8 @@ playButton.on('click', () => {
         if (!snapshot.exists()) {
 
             // Inform user about progress
-            $('#game-feeback').text('No games found. Setting up new game...');
+            feedback.text('No games found. Setting up new game...');
+
 
             let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
                 console.log('created new room: ' + roomID.key)
@@ -108,7 +118,7 @@ playButton.on('click', () => {
                     currentGame = roomIDs[i];
 
                     // Inform user about progress
-                    $('#game-feeback').text('Game Found! Joining game...');
+                    feedback.text('Game Found! Joining game...');
 
                     // Construct an update package change looking for game to false and player2 to current user name
                     // Then update server
@@ -117,6 +127,9 @@ playButton.on('click', () => {
                     gameInfoUpdates[`${currentGame}/player2/`] = playerName;
                     database.ref().update(gameInfoUpdates);
 
+                    // Finally, reveal action buttons
+                    allActionButtons.removeClass('hide');
+                    chatWindow.removeClass('hide');
                     break;
                 }
             }
@@ -126,11 +139,15 @@ playButton.on('click', () => {
         if (!currentGame) {
 
             // Inform user about progress
-            $('#game-feeback').text('No games found. Setting up new game...');
+            feedback.text('No games found. Setting up new game...');
 
             let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
                 console.log('created new room: ' + roomID.key)
             });
+
+            // Finally, reveal action buttons
+            allActionButtons.removeClass('hide');
+            chatWindow.removeClass('hide');
         };
 
     })
@@ -158,6 +175,9 @@ $(document).ready(function () {
         }
         else {
             playerName = pName;
+            userNameSpan.text(playerName);
+            userNameSpan.removeClass('hide');
+            userNamePic.removeClass('hide');
             playerInfoForm.remove();
             mainReadout.append(playButton);
         };
