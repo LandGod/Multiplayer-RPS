@@ -56,6 +56,7 @@ const playerInfoSubmit = $('#playerNameSubmit');
 // Instantiate some global variables for later
 let playerName;
 let currentGame;
+let playerTwo;
 
 function solveGame(u1, u2) {
     // Take two objects and returns the object of the winner, or undefined if there is no winner
@@ -147,6 +148,25 @@ function toggleDisplayBox(box) {
     };
 };
 
+function listenForConnect() {
+    // Sets up an event listener for the opponent connecting to the game
+    // then does...
+
+    database.ref(`${currentGame}/player2/`).on('value', (snapshot) => {
+
+        if (!snapshot.val()) {
+            // If no value for player2 then do nothing
+            console.log("No current value for player 2");
+        }
+        else {
+            // Set playerTwo variable and inform the user that player 2 has connected
+            playerTwo = snapshot.val();
+            feedback.text(playerTwo + ' has joined the game!');
+            toggleDisplayBox(opponentDisplayBox);
+        };
+    });
+};
+
 //
 // Define Click handler for play button which chains into starting the game
 
@@ -168,11 +188,15 @@ playButton.on('click', () => {
             // Inform user about progress
             feedback.text('No games found. Setting up new game...');
 
-
+            // Create new game room and save room ID to current game variable
             let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
                 currentGame = roomID.key;
                 console.log('created new room: ' + roomID.key)
             });
+
+            // Start listening for a connection from an opponent
+            listenForConnect();
+
         }
 
         // If there are rooms saved in the database, check to see if any are waiting for a player 2 (ie: looking for game)
@@ -215,10 +239,16 @@ playButton.on('click', () => {
                 console.log('created new room: ' + roomID.key)
             });
 
+            // Set new room's ID as currentGame
+            currentGame = roomID.key
+
             // Finally, reveal action buttons, but first signify that no opponent is present with a darkened opponent box and message 
             toggleDisplayBox(opponentDisplayBox);
             feedback.text('Waiting for opponent to connect...');
             displayGame();
+
+            // Start listening for a connection from an opponent
+            listenForConnect();
         };
 
     })
