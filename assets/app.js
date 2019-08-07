@@ -385,7 +385,7 @@ $(document).ready(function () {
                 // Create new game room and save room ID to current game variable
                 let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
                     currentGame = roomID.key;
-                    console.log('created new room: ' + roomID.key)
+                    console.log('created new room: ' + currentGame)
                 });
 
                 // Locally we're always player1, but on the database, we're also player1 if we created the room
@@ -393,6 +393,8 @@ $(document).ready(function () {
 
                 // Start listening for a connection from an opponent
                 listenForConnect(commencePlay);
+
+                return;
 
             }
 
@@ -428,7 +430,7 @@ $(document).ready(function () {
                         displayGame();
                         commencePlay();
 
-                        break;
+                        return;
                     }
                 }
 
