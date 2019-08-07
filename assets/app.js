@@ -97,6 +97,47 @@ $(document).ready(function () {
         playDisplayBoxes.removeClass('hide');
     };
 
+    // Makes the chat sidebar useable
+    function startChat() {
+
+        // Only create a new chat folder in the game room folder if you are the host
+        if (amPlayer === 'player1') {
+            database.ref(`${currentGame}/chat/`).set('null');
+        };
+
+        // Setup and event listener for children added to the newly created chat folder
+        database.ref(`${currentGame}/chat/`).on('child_added', function (snapshot) {
+            if (snapshot) {
+                console.log(`Recieving new chat: ${snapshot.val()}`);
+                console.log(snapshot)
+                console.log(snapshot.val())
+                console.log(snapshot.val().message)
+                let sender = snapshot.val().name
+                let message = snapshot.val().message
+
+                let newChatLine = $('<p>').text(message);
+                let strongName = $('<strong>').text(sender + ': ');
+                newChatLine.prepend(strongName)
+                chatBody.append(newChatLine);
+            };
+        });
+
+        // Setup an event handler for the chat input
+        chatInput.keyup(function (event) {
+            if (event.which == 13) {
+                console.log(`Sending chat: ${$(this).val()}`);
+                console.log(playerName)
+                database.ref(`${currentGame}/chat/`).push({name: playerName, message: $(this).val()});
+                $(this).val('');
+            }
+            else {
+                console.log("Didn't press enter! Keypress was:");
+                console.log(event.which);
+            }
+        });
+
+    };
+
     // Sets an event listener for the user closing this page, so that this can be reported to the other player
     // When triggered, the even listener will delete the current game from the database
     // This event should trigger a response on the other player's machine, but that's dealt with somewhere else 
@@ -227,6 +268,10 @@ $(document).ready(function () {
 
     // Activates play action buttons, afk timers, and win/loss conditions
     function commencePlay() {
+
+        // Enable Chat
+        console.log('Enabling chat...')
+        startChat();
 
         // Wait 1 second just so the user sees that the opponent joined before doing anything else
         setTimeout(function () {
