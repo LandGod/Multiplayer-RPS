@@ -130,7 +130,7 @@ $(document).ready(function () {
             if (event.which == 13) {
                 console.log(`Sending chat: ${$(this).val()}`);
                 console.log(playerName)
-                database.ref(`${currentGame}/chat/`).push({name: playerName, message: $(this).val()});
+                database.ref(`${currentGame}/chat/`).push({ name: playerName, message: $(this).val() });
                 $(this).val('');
             }
             else {
@@ -202,8 +202,8 @@ $(document).ready(function () {
     };
 
     // Sets up an event listener for the opponent connecting to the game
-    // Then starts the game, after a pause, when the opponent joins
-    function listenForConnect(callback) {
+    // Then starts the game, via the supplied callback, after a pause, when the opponent joins
+    function listenForConnect(callback, flag = 'newGame') {
 
         database.ref(`${currentGame}/player2/`).on('value', (snapshot) => {
 
@@ -221,7 +221,7 @@ $(document).ready(function () {
                 toggleDisplayBox(opponentDisplayBox);
 
                 // Then runs the callback which should probably be moving the actual play phase of the game
-                callback()
+                callback(flag)
             };
         });
     };
@@ -267,14 +267,17 @@ $(document).ready(function () {
     };
 
     // Activates play action buttons, afk timers, and win/loss conditions
-    function commencePlay() {
+    function commencePlay(flag = 'newGame') {
 
-        // Engage listener for opponent disconnect 
-        listenForDisconnect()
+        // Only do the following if the game is being started from scratch
+        if (!(flag === 'rematch')) {
+            // Engage listener for opponent disconnect 
+            listenForDisconnect()
 
-        // Enable Chat
-        console.log('Enabling chat...')
-        startChat();
+            // Enable Chat
+            console.log('Enabling chat...')
+            startChat();
+        };
 
         // Wait 1 second just so the user sees that the opponent joined before doing anything else
         setTimeout(function () {
@@ -353,7 +356,46 @@ $(document).ready(function () {
             });
 
         }, 1000)
-    }
+    };
+
+    // Function for resetting the game, but still using the current players
+    function reMatch() {
+
+        // Reset afk timer time
+        afkTime = 15;
+
+        // Remove images from display boxes 
+        userDisplayBox.css("background-image", 'none');
+        opponentDisplayBox.css("background-image", 'none');
+
+        // Reset action buttons
+        $(`#${uAction}-button`).removeClass('btn-dark');
+        $(`#${uAction}-button`).addClass('btn-success');
+
+        // If host reset user values in the database back to player names (since that's our null value for throw selection)
+        // Then start the game again in that callback, so we don't accidentally grab values from the last game
+        if (amPlayer === 'player1') {
+
+            let data = {};
+            data[`${currentGame}/player1`] = playerName;
+            data[`${currentGame}/player2`] = playerTwo;
+            database.ref().update(data);
+
+            listenForConnect('rematch');
+        }
+
+        // If not host, just listen for value reset, then use that callback to start the game again
+        else {
+            database.ref(`${currentGame}/player1`).on('value', function (snapshot) {
+                if (snapshot.val() === playerTwo) {
+                    listenForConnect('rematch');
+                }
+            });
+        };
+
+
+
+    };
 
     // Define Click handler for play button which chains into starting the game
     // The play button leads to one of 3 possibilities:
