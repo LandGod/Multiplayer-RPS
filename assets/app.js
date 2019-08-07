@@ -323,6 +323,14 @@ $(document).ready(function () {
                 // Then we can grab the user's choice and update the DOM with that information.
                 let uAction = $(this).val();
 
+                // Reflect selection via button and disable buttons
+                allActionButtons.attr('disabled', '')
+                $(`#${uAction}-button`).removeClass('btn-dark');
+                $(`#${uAction}-button`).addClass('btn-success');
+
+                // Display user choice in their display box
+                userDisplayBox.css('background-image', `url("assets/${uAction}.png"`)
+
                 // We should also send our choice to the database
                 // Because both players have already stored eachother's names localy, we can reuse those fields on the database to add our actions
                 database.ref('/' + currentGame + '/' + amPlayer + '/').set(uAction);
@@ -340,7 +348,6 @@ $(document).ready(function () {
                         console.log(uAction);
                         console.log('Other user threw:');
                         console.log(snapshot.val());
-                        userDisplayBox.css('background-image', `url("assets/${uAction}.png"`)
                         opponentDisplayBox.css('background-image', `url("assets/${snapshot.val()}.png"`)
                         let result = solveGame(uAction, snapshot.val());
                         endGame(result);
