@@ -1,10 +1,22 @@
 .play-display-box {
     height: 30vh;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .user {
     background-color: lightgreen;
     border: 2px solid green;
+
+    /* Flip background image vertically */
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
 }
 
 .opponent {
