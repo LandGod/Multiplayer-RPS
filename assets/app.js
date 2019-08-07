@@ -21,11 +21,6 @@ $(document).ready(function () {
     // For test purposes only! DEBUG DEBUG DEBUG!
     localStorage.setItem('currentUserName', 'testUser22');
 
-    // make rock paper and scissors variables for easy coding
-    const rock = 'rock';
-    const paper = 'paper';
-    const scissors = 'scissors';
-
     // html element handles:
     const userNameSpan = $('#user-name-name'); // Upper left-hand corner username display
     const userNamePic = $('#user-name-pic'); // Icon that goes to the left of the username
@@ -35,15 +30,13 @@ $(document).ready(function () {
     const mainReadout = $('#readout'); // Game action descriptions
     const feedback = $('#game-feeback'); // Results output
 
-    const playDisplayBoxes = $('.play-display-box'); // Boxes for display of rock paper or scissors for each player
-    const userDisplayBox = $('#user-display');
-    const opponentDisplayBox = $('#opponent-display');
+    // Boxes for display of rock paper or scissors for each player
+    const playDisplayBoxes = $('.play-display-box'); // Both
+    const userDisplayBox = $('#user-display'); // User
+    const opponentDisplayBox = $('#opponent-display'); // Opponent
 
     // RPS Buttons
     const allActionButtons = $('.rps-button');
-    const rockButton = $('#rock-button');
-    const paperButton = $('#paper-button');
-    const scissorsButton = $('#scissors-button');
 
     // html element handles for chat:
     const chatWindow = $('.chat-window');
@@ -51,16 +44,18 @@ $(document).ready(function () {
     const chatBody = $('#chat-body');
     const chatInput = $('#chat-input');
 
-    // Html elements to add/remove during game
+    // Html elements for play button
     const playButton = $('<button class="btn btn-danger" id="play-button">').text('Play');
+
+    // HTML element handles for player name input form
     const playerInfoForm = $('#playerNameForm');
     const playerNameInput = $('#playerName');
     const playerInfoSubmit = $('#playerNameSubmit');
 
     // Instantiate some global variables for later
-    let playerName;
-    let currentGame;
-    let playerTwo;
+    let playerName; // The name the player entered when starting the game
+    let currentGame; // The reference name for the database location where the current game instance is stored. 
+    let playerTwo; // The name the opponent player has chosen
     let afkTime = 15; // Used for AFK Timer
     let amPlayer; // Use this to keep track of whether or not you are host: player1, or joiner: player 2. On the server side.
 
@@ -101,6 +96,7 @@ $(document).ready(function () {
     };
 
     // Makes the chat sidebar useable
+    // Also calls the function to add the opponent's name opposite player name in the main game area
     function startChat() {
 
         // Reveal opponent name
@@ -148,8 +144,7 @@ $(document).ready(function () {
     // Sets an event listener for the user closing this page, so that this can be reported to the other player
     // When triggered, the even listener will delete the current game from the database
     // This event should trigger a response on the other player's machine, but that's dealt with somewhere else 
-    // Note that we can't trust this function to always execute, so we will still need to also provide a timeout for responses from the opponent
-    // as an additional way to see if they have disconnected, or for that matter, just gone AFK
+    // Because we're using the firebase onDisconnect method, this should always execute, even on non-clean disconnects
     function setOnUserExit() {
 
         database.ref(currentGame).onDisconnect().remove();
