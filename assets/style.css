@@ -38,3 +38,11 @@
     width: 10px;
     background-color: lightgreen;
 }
+
+#opponent-name-pic {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    background-color: lightgrey;
+    margin-left: 3px;
+}
