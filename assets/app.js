@@ -322,7 +322,6 @@ $(document).ready(function () {
 
                 // Then we can grab the user's choice and update the DOM with that information.
                 let uAction = $(this).val();
-                userDisplayBox.text(uAction);
 
                 // We should also send our choice to the database
                 // Because both players have already stored eachother's names localy, we can reuse those fields on the database to add our actions
