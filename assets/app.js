@@ -152,9 +152,7 @@ $(document).ready(function () {
     // as an additional way to see if they have disconnected, or for that matter, just gone AFK
     function setOnUserExit() {
 
-        $(window).on('unload', () => {
-            database.ref().remove(currentGame);
-        });
+        database.ref(currentGame).onDisconnect().remove();
     };
 
     // Does what is required to inform the user and otherwise update the DOM when the opponent disconnects.
@@ -164,13 +162,13 @@ $(document).ready(function () {
 
         switch (reason) {
             default:
-                console.log('Opponent has disconnected!');
+                feedback.text('Opponent has disconnected!');
                 break;
             case 'time':
-                console.log('Opponent lost connection or was kicked for inactivity.');
+                feedback.text('Opponent lost connection or was kicked for inactivity.');
                 break;
             case 'gameOver':
-                console.log('Oppenent left.');
+                feedback.text('Oppenent left.');
                 break;
 
         }
@@ -275,6 +273,9 @@ $(document).ready(function () {
 
     // Activates play action buttons, afk timers, and win/loss conditions
     function commencePlay() {
+
+        // Engage listener for opponent disconnect 
+        listenForDisconnect()
 
         // Enable Chat
         console.log('Enabling chat...')
@@ -388,6 +389,9 @@ $(document).ready(function () {
                     console.log('created new room: ' + currentGame)
                 });
 
+                // Now that we've created a room, make sure it gets cleaned up if we leave
+                setOnUserExit();
+
                 // Locally we're always player1, but on the database, we're also player1 if we created the room
                 amPlayer = 'player1'
 
@@ -426,6 +430,9 @@ $(document).ready(function () {
                         gameInfoUpdates[`${currentGame}/player2/`] = playerName;
                         database.ref().update(gameInfoUpdates);
 
+                        // Set up cleanup actions for user exit
+                        setOnUserExit();
+
                         // Finally, reveal action buttons
                         displayGame();
                         commencePlay();
@@ -451,6 +458,9 @@ $(document).ready(function () {
 
                 // Locally we're always player1, but on the database, we're also player1 if we created the room
                 amPlayer = 'player1'
+
+                // Set up cleanup actions for user exit
+                setOnUserExit();
 
                 // Finally, reveal action buttons, but first signify that no opponent is present with a darkened opponent box and message 
                 toggleDisplayBox(opponentDisplayBox);
