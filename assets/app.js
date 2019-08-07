@@ -29,6 +29,8 @@ $(document).ready(function () {
     // html element handles:
     const userNameSpan = $('#user-name-name'); // Upper left-hand corner username display
     const userNamePic = $('#user-name-pic'); // Icon that goes to the left of the username
+    const opponentNameSpan = $('#opponent-name-name'); // Upper left-hand corner opponentname display
+    const opponentNamePic = $('#opponent-name-pic'); // Icon that goes to the left of the opponentname
     const mainDisplay = $('#main-screen') // Main display area for game action 
     const mainReadout = $('#readout'); // Game action descriptions
     const feedback = $('#game-feeback'); // Results output
@@ -95,10 +97,15 @@ $(document).ready(function () {
         allActionButtons.removeClass('hide');
         chatWindow.removeClass('hide');
         playDisplayBoxes.removeClass('hide');
+
     };
 
     // Makes the chat sidebar useable
     function startChat() {
+
+        // Reveal opponent name
+        opponentNameSpan.text(playerTwo);
+        opponentNamePic.css('background-color', 'pink');
 
         // Only create a new chat folder in the game room folder if you are the host
         if (amPlayer === 'player1') {
@@ -469,6 +476,10 @@ $(document).ready(function () {
             userNameSpan.text(playerName);
             userNameSpan.removeClass('hide');
             userNamePic.removeClass('hide');
+
+            opponentNameSpan.removeClass('hide');
+            opponentNamePic.removeClass('hide');
+
             playerInfoForm.remove();
             mainReadout.append(playButton);
         };
