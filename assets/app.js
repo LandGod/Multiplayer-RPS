@@ -341,6 +341,8 @@ $(document).ready(function () {
                         console.log(uAction);
                         console.log('Other user threw:');
                         console.log(snapshot.val());
+                        userDisplayBox.css('background-image', `url("assets/${uAction}.png"`)
+                        opponentDisplayBox.css('background-image', `url("assets/${snapshot.val()}.png"`)
                         let result = solveGame(uAction, snapshot.val());
                         endGame(result);
                     };
