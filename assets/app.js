@@ -1,5 +1,3 @@
-// import * as firebaseui from 'firebaseui'
-
 $(document).ready(function () {
 
     var firebaseConfig = {
@@ -296,6 +294,10 @@ $(document).ready(function () {
         if (afkTime <= 0) {
             clearInterval(afkTimer);
             endGame('timeout');
+            setInterval(function () {
+                // Refresh page, returning to name select and deleteding game room
+                location.reload();
+            }, 1000)
         }
         // Else, decrement timer
         feedback.text(`You have ${afkTime} seconds to throw or you will be disqualified!`);
@@ -445,7 +447,7 @@ $(document).ready(function () {
     };
 
     // Function for adding a rematch button to the DOM with a handler to call reMatch when clicked
-    function createEndOfMatchButtons(quitOnly=false) {
+    function createEndOfMatchButtons(quitOnly = false) {
 
         // Only create a rematch button if no truthy argument passed to quitOnly
         if (!quitOnly) {
