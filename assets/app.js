@@ -126,15 +126,9 @@ $(document).ready(function () {
         // Setup an event handler for the chat input
         chatInput.keyup(function (event) {
             if (event.which == 13) {
-                console.log(`Sending chat: ${$(this).val()}`);
-                console.log(playerName)
                 database.ref(`${currentGame}/chat/`).push({ name: playerName, message: $(this).val() });
                 $(this).val('');
-            }
-            else {
-                console.log("Didn't press enter! Keypress was:");
-                console.log(event.which);
-            }
+            };
         });
 
     };
@@ -218,7 +212,7 @@ $(document).ready(function () {
 
                 if (!snapshot.val()) {
                     // If no value for player2 then do nothing
-                    console.log("No current value for player 2");
+
                 }
                 else {
                     // Remove this listener since we only needed it until it returned this data
@@ -257,8 +251,6 @@ $(document).ready(function () {
 
     // Ends the game and informs the user that they have won or lost or had a draw.
     function endGame(reason) {
-
-        console.log('endGame was called!')
 
         switch (reason) {
             case 'timeout':
@@ -312,13 +304,11 @@ $(document).ready(function () {
             listenForDisconnect()
 
             // Enable Chat
-            console.log('Enabling chat...')
             startChat();
         };
 
         // Wait 1 second just so the user sees that the opponent joined before doing anything else
         setTimeout(function () {
-            console.log('Commencing play');
 
             // Print play message and start a timeout clock
             feedback.text('Throw!');
@@ -347,8 +337,6 @@ $(document).ready(function () {
                 catch (error) {
                     // We expect a reference error here, but if we get any other kind of error we'll pass it along
                     if (!(error instanceof ReferenceError)) {
-                        console.log(error)
-                        console.log(`Couldn't catch ${typeof (error)} because it was not a Reference Error`)
                         throw (error)
                     };
                 }
@@ -384,10 +372,6 @@ $(document).ready(function () {
                         // Once we know we have the data we need, we can remove the listener
                         database.ref('/' + currentGame + '/' + otherPlayer + '/').off();
 
-                        console.log('You threw:');
-                        console.log(uAction);
-                        console.log('Other user threw:');
-                        console.log(snapshot.val());
                         opponentDisplayBox.css('background-image', `url("assets/${snapshot.val()}.png"`)
                         let result = solveGame(uAction, snapshot.val());
                         endGame(result);
@@ -515,7 +499,6 @@ $(document).ready(function () {
                 // Create new game room and save room ID to current game variable
                 let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
                     currentGame = roomID.key;
-                    console.log('created new room: ' + currentGame)
                 });
 
                 // Now that we've created a room, make sure it gets cleaned up if we leave
@@ -579,7 +562,6 @@ $(document).ready(function () {
                 feedback.text('No games found. Setting up new game...');
 
                 let roomID = database.ref().push({ 'lfg': true, 'player1': playerName, player2: '' }, function () {
-                    console.log('created new room: ' + roomID.key)
                 });
 
                 // Set new room's ID as currentGame
