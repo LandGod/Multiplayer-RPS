@@ -90,6 +90,7 @@ $(document).ready(function () {
 
         allActionButtons.removeClass('hide');
         chatWindow.removeClass('hide');
+        $('#chat-container').removeClass('hide');
         playDisplayBoxes.removeClass('hide');
 
     };
@@ -110,10 +111,6 @@ $(document).ready(function () {
         // Setup and event listener for children added to the newly created chat folder
         database.ref(`${currentGame}/chat/`).on('child_added', function (snapshot) {
             if (snapshot) {
-                console.log(`Recieving new chat: ${snapshot.val()}`);
-                console.log(snapshot)
-                console.log(snapshot.val())
-                console.log(snapshot.val().message)
                 let sender = snapshot.val().name
                 let message = snapshot.val().message
 
@@ -121,6 +118,8 @@ $(document).ready(function () {
                 let strongName = $('<strong>').text(sender + ': ');
                 newChatLine.prepend(strongName)
                 chatBody.append(newChatLine);
+
+                chatBody.animate({ scrollTop: 9999 }, "slow");
             };
         });
 
