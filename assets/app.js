@@ -168,6 +168,13 @@ $(document).ready(function () {
                 break;
 
         }
+
+        // Get rid of any existing quit or remtach buttons
+        endButtonRow.empty()
+
+        // Add a quit button only
+        createEndOfMatchButtons(true);
+
     };
 
     // Sets an event listener for a value change to the current game room in the database
@@ -277,7 +284,7 @@ $(document).ready(function () {
         }
 
         // Offer user choice to ask for a rematch or quit.
-        reMatchButton();
+        createEndOfMatchButtons();
 
     }
 
@@ -438,25 +445,32 @@ $(document).ready(function () {
     };
 
     // Function for adding a rematch button to the DOM with a handler to call reMatch when clicked
-    function reMatchButton() {
+    function createEndOfMatchButtons(quitOnly=false) {
 
-        // Setup rematch button
-        let reMatchButton = $('<button>');
-        reMatchButton.text('Rematch');
-        reMatchButton.addClass('btn btn-primary');
+        // Only create a rematch button if no truthy argument passed to quitOnly
+        if (!quitOnly) {
+            // Setup rematch button
+            let reMatchButton = $('<button>');
+            reMatchButton.text('Rematch');
+            reMatchButton.addClass('btn btn-primary');
 
-        // Click handler for rematch button
-        reMatchButton.click(function () {
+            // Click handler for rematch button
+            reMatchButton.click(function () {
 
-            // remove buttons
-            endButtonRow.empty()
+                // remove buttons
+                endButtonRow.empty()
 
-            // Reset game
-            reMatch();
-        });
+                // Reset game
+                reMatch();
+            });
+
+            // Append the button to the DOM
+            endButtonRow.append(reMatchButton);
+
+        };
 
         // Setup quit button
-        let quitButton = $('<button>')
+        let quitButton = $('<button>');
         quitButton.text('Quit');
         quitButton.addClass('btn btn-danger');
 
@@ -471,7 +485,6 @@ $(document).ready(function () {
         });
 
         // Add button to dom
-        endButtonRow.append(reMatchButton);
         endButtonRow.append(quitButton);
     };
 
