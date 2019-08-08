@@ -58,3 +58,23 @@
     background-color: lightgrey;
     margin-left: 3px;
 }
+
+#chat-input {
+    width: 100%;
+    border: 1px solid black;
+    border-top: none;
+}
+
+#chat-container {
+    height: 100%;
+    width: 100%;
+    border: 1px solid black;
+    display: flex;
+}
+
+#chat-body {
+    height: 50vh;
+    align-self: flex-end;
+    overflow-y: scroll;
+    
+}
