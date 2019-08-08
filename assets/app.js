@@ -58,6 +58,10 @@ $(document).ready(function () {
     let afkTime = 15; // Used for AFK Timer
     let amPlayer; // Use this to keep track of whether or not you are host: player1, or joiner: player 2. On the server side.
 
+    // Scoring
+    let myScore = 0;
+    let opponentScore = 0;
+
     // Take two 'throws' and returns the object of the winner, or undefined if there is no winner
     function solveGame(u1, u2) {
 
@@ -258,9 +262,11 @@ $(document).ready(function () {
                 break;
             case 'loss':
                 feedback.text(`${playerTwo} wins!`)
+                opponentScore++;
                 break;
             case 'win':
                 feedback.text(`You win!`)
+                myScore++;
                 break;
             case 'draw':
                 feedback.text(`It's a draw!`)
@@ -271,6 +277,10 @@ $(document).ready(function () {
             default:
                 throw ('Error: Invalid reason given for game end.')
         }
+
+        // Update DOM with scores
+        $('#user-score').text(myScore);
+        $('#opponent-score').text(opponentScore);
 
         // Offer user choice to ask for a rematch or quit.
         createEndOfMatchButtons();
