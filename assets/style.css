@@ -76,6 +76,6 @@
     max-height: 50vh;
     width: 100%;
     align-self: flex-end;
-    overflow-y: scroll;
+    overflow-y: auto;
     
 }
