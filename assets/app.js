@@ -44,8 +44,9 @@ $(document).ready(function () {
     const chatBody = $('#chat-body');
     const chatInput = $('#chat-input');
 
-    // Html elements for play button
+    // Html elements for non-game buttons
     const playButton = $('<button class="btn btn-danger" id="play-button">').text('Play');
+    const endButtonRow = $('#extra-button-row');
 
     // HTML element handles for player name input form
     const playerInfoForm = $('#playerNameForm');
@@ -205,25 +206,49 @@ $(document).ready(function () {
     // Then starts the game, via the supplied callback, after a pause, when the opponent joins
     function listenForConnect(callback, flag = 'newGame') {
 
-        database.ref(`${currentGame}/player2/`).on('value', (snapshot) => {
+        // Only if host, do the following...
+        if (amPlayer === 'player1') {
 
-            if (!snapshot.val()) {
-                // If no value for player2 then do nothing
-                console.log("No current value for player 2");
-            }
-            else {
-                // Remove this listener since we only needed it until it returned this data
-                database.ref(`${currentGame}/player2/`).off();
+            // Grab value for player2 from the database
+            database.ref(`${currentGame}/player2/`).on('value', (snapshot) => {
 
-                // Set playerTwo variable and inform the user that player 2 has connected
-                playerTwo = snapshot.val();
-                feedback.text(playerTwo + ' has joined the game!');
-                toggleDisplayBox(opponentDisplayBox);
+                if (!snapshot.val()) {
+                    // If no value for player2 then do nothing
+                    console.log("No current value for player 2");
+                }
+                else {
+                    // Remove this listener since we only needed it until it returned this data
+                    database.ref(`${currentGame}/player2/`).off();
 
-                // Then runs the callback which should probably be moving the actual play phase of the game
-                callback(flag)
-            };
-        });
+                    // Set playerTwo variable and inform the user that player 2 has connected
+                    playerTwo = snapshot.val();
+                    feedback.text(playerTwo + ' has joined the game!');
+                    toggleDisplayBox(opponentDisplayBox);
+
+                    // Then runs the callback which should probably be moving the actual play phase of the game
+                    callback(flag)
+                };
+            });
+        }
+
+        // If not host, then this must be a rematch, so see if host has reset
+        else {
+
+            // Grab value for player1 from the database
+            database.ref(`${currentGame}/player1/`).on('value', (snapshot) => {
+
+                // If the player1 value is that player's name, then they're ready for a rematch
+                // if not, sit tight until they update that value or quit
+                if (snapshot.val() === playerTwo) {
+                    let gameInfoUpdates = {};
+                    gameInfoUpdates[`${currentGame}/player2/`] = playerName;
+                    database.ref().update(gameInfoUpdates);
+
+                    // Comence game
+                    callback(flag);
+                };
+            });
+        };
     };
 
     // Ends the game and informs the user that they have won or lost or had a draw.
@@ -250,6 +275,10 @@ $(document).ready(function () {
             default:
                 throw ('Error: Invalid reason given for game end.')
         }
+
+        // Offer user choice to ask for a rematch or quit.
+        reMatchButton();
+
     }
 
     // Called by timer in commencePlay if user does not take action quickly enough. 
@@ -343,6 +372,10 @@ $(document).ready(function () {
 
                     // We only want to grab this data if it has been changed from the username
                     if (snapshot.val() !== playerTwo) {
+
+                        // Once we know we have the data we need, we can remove the listener
+                        database.ref('/' + currentGame + '/' + otherPlayer + '/').off();
+
                         console.log('You threw:');
                         console.log(uAction);
                         console.log('Other user threw:');
@@ -369,8 +402,8 @@ $(document).ready(function () {
         opponentDisplayBox.css("background-image", 'none');
 
         // Reset action buttons
-        $(`#${uAction}-button`).removeClass('btn-dark');
-        $(`#${uAction}-button`).addClass('btn-success');
+        allActionButtons.removeClass('btn-success');
+        allActionButtons.addClass('btn-dark');
 
         // If host reset user values in the database back to player names (since that's our null value for throw selection)
         // Then start the game again in that callback, so we don't accidentally grab values from the last game
@@ -378,23 +411,68 @@ $(document).ready(function () {
 
             let data = {};
             data[`${currentGame}/player1`] = playerName;
-            data[`${currentGame}/player2`] = playerTwo;
+            data[`${currentGame}/player2`] = null;
             database.ref().update(data);
 
-            listenForConnect('rematch');
+            // Let user know we're waiting on other player to proceed
+            feedback.text('Waiting for other player...');
+
+            listenForConnect(commencePlay, 'rematch');
         }
 
         // If not host, just listen for value reset, then use that callback to start the game again
         else {
+
+            // Let user know we're waiting on other player to proceed
+            feedback.text('Waiting for other player...');
+
             database.ref(`${currentGame}/player1`).on('value', function (snapshot) {
                 if (snapshot.val() === playerTwo) {
-                    listenForConnect('rematch');
+                    listenForConnect(commencePlay, 'rematch');
                 }
             });
         };
 
 
 
+    };
+
+    // Function for adding a rematch button to the DOM with a handler to call reMatch when clicked
+    function reMatchButton() {
+
+        // Setup rematch button
+        let reMatchButton = $('<button>');
+        reMatchButton.text('Rematch');
+        reMatchButton.addClass('btn btn-primary');
+
+        // Click handler for rematch button
+        reMatchButton.click(function () {
+
+            // remove buttons
+            endButtonRow.empty()
+
+            // Reset game
+            reMatch();
+        });
+
+        // Setup quit button
+        let quitButton = $('<button>')
+        quitButton.text('Quit');
+        quitButton.addClass('btn btn-danger');
+
+        // Click handler for quit button
+        quitButton.click(function () {
+
+            // remove buttons
+            endButtonRow.empty()
+
+            // Refresh page, returning to name select and deleteding game room
+            location.reload();
+        });
+
+        // Add button to dom
+        endButtonRow.append(reMatchButton);
+        endButtonRow.append(quitButton);
     };
 
     // Define Click handler for play button which chains into starting the game
